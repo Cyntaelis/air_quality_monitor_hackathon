@@ -45,7 +45,8 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
         zip_dict = get_zip_dict()
         if query not in zip_dict:
             return None
-
+            
+        #TODO: denotebookify this, break out this use case, and add more of the other data products
         @st.cache_data(ttl=ttl)
         def _query(query: str, **kwargs) -> pd.DataFrame:
 
