@@ -15,15 +15,14 @@ st.subheader("Only works on US ZIP codes with a monitoring station within 20mi. 
 conn = st.experimental_connection("airnow", type=AirnowConnection)
 
 columns = [
-                             "Monitoring Site", 
-                             "Lat",
-                             "Lon",
-                             "Dist",
-                             "Direction", 
-                             "Ozone", #include units
-                             "PM 2.5", 
-                             "PM 10",
-                            ]
+    "Site Name",
+    "Latitude",
+    "Longitude",
+    "PM2.5",
+    "PM10",
+    "OZONE",
+    "Station Distance",
+    "Station Direction"]
 
 df = pd.DataFrame(np.zeros((0,len(columns))), columns=columns, index=[])
 

@@ -75,8 +75,18 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
                                     "drop1","drop2","drop3"]
                             ).drop(["drop1","drop2","drop3"],axis=1)
                             
+            danger_conv = {
+                "-999":"",
+                "1":"",
+                "2":"[!]",
+                "3":"[!!]",
+                "4":"[!!!]",
+                "5":"[!!!]",
+                "6":"[!!!]"
+            }
 
-            df["Concentration/Unit"] = df["Concentration"].astype(str) + " " + df["Unit"]
+            df["Concentration/Unit"] = df["Concentration"].astype(str) + " "\
+                  + df["Unit"] + " " + df["Danger"].apply(lambda x:str(danger_conv[str(x)]))
      
             pivoted_df = df.pivot_table(index=["Site Name","Latitude","Longitude",], 
                         columns=["Type"], 
