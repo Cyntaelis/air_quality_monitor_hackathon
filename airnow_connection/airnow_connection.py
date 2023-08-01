@@ -26,9 +26,12 @@ def get_times(delta=1):
 class AirnowConnection(ExperimentalBaseConnection[requests.session]):
 
     def _connect(self, **kwargs) -> requests.session: 
-            self.airnow_key = self._secrets["airnow_key"]
-            self.session = requests.session()
-            return self.session
+        self.airnow_key = self._secrets["airnow_key"]
+        self.session = requests.session()
+        return self.session
+    
+    def cursor(self):
+        return self.session
 
     def query(self, query: str, ttl: int = CACHE_TTL, **kwargs):
 
