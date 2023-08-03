@@ -10,8 +10,10 @@ import datetime
 from spatial import gazetteer
 from spatial import haversine
 
+PROD_TTL = 3600 #1 hour
+TESTING_TTL = 1
+CACHE_TTL = TESTING_TTL 
 
-CACHE_TTL = 3600 #1 hour
 RADIUS = 20 #RADIUS*2 by RADIUS*2 square before sphere projection curvature
 AIRNOW_DATA_ENDPOINT = "https://www.airnowapi.org/aq/data/"
 
@@ -104,16 +106,17 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
             
             pivoted_df["Station Direction"] = pivoted_df["Station Angle"].apply(haversine.degrees_to_direction)
 
-            pivoted_df = pivoted_df[pd.MultiIndex.from_tuples([
-                        ("Site Name",               ""),
-                        ("Latitude",                ""),
-                        ("Longitude",               ""),
-                        ("Concentration/Unit", "PM2.5"),
-                        ("Concentration/Unit",  "PM10"),
-                        ("Concentration/Unit", "OZONE"),
-                        ("Station Distance",        ""),
-                        ("Station Direction",       ""),
-                        ])]
+            #removed as temp fix for rural zips with incomplete data
+            # pivoted_df = pivoted_df[pd.MultiIndex.from_tuples([
+            #             ("Site Name",               ""),
+            #             ("Latitude",                ""),
+            #             ("Longitude",               ""),
+            #             ("Concentration/Unit", "PM2.5"),
+            #             ("Concentration/Unit",  "PM10"),
+            #             ("Concentration/Unit", "OZONE"),
+            #             ("Station Distance",        ""),
+            #             ("Station Direction",       ""),
+            #             ])]
             
             
             pivoted_df.sort_values(by="Station Distance").head(60)
