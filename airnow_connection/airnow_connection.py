@@ -1,4 +1,4 @@
-from streamlit.connections import ExperimentalBaseConnection
+from streamlit.connections import BaseConnection
 from streamlit.runtime.caching import cache_data
 from io import StringIO
 
@@ -25,7 +25,7 @@ def get_times(delta=1):
     shifted_time_str = shifted_time.strftime("%Y-%m-%dT%H")
     return current_time_str, shifted_time_str
 
-class AirnowConnection(ExperimentalBaseConnection[requests.session]):
+class AirnowConnection(BaseConnection[requests.session]):
 
     def _connect(self, **kwargs) -> requests.session: 
         self.airnow_key = self._secrets["airnow_key"]
@@ -49,7 +49,7 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
             return None
             
         #TODO: denotebookify this, break out this use case, and add more of the other data products
-        @st.cache_data(ttl=ttl)
+        #@st.cache_data(ttl=ttl)
         def _query(query: str, **kwargs) -> pd.DataFrame:
 
             coords = zip_dict[query]
@@ -80,7 +80,10 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
                                     "AQI","Danger","Site Name",
                                     "drop1","drop2","drop3"]
                             ).drop(["drop1","drop2","drop3"],axis=1)
-                            
+
+            if len(df.index) == 0: #no stations within 20mi
+                return df 
+
             danger_conv = {
                 "-999":"",
                 "1":"",

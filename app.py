@@ -12,7 +12,7 @@ st.set_page_config(
 
 st.title("Current Air Quality Monitor Readings")
 st.subheader("Only works on US ZIP codes with a monitoring station within 20mi. Data from airnow.gov")
-conn = st.experimental_connection("airnow", type=AirnowConnection)
+conn = st.connection("airnow", type=AirnowConnection)
 
 columns = [
     "Site Name",
