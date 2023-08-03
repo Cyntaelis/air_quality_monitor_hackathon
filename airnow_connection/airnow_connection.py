@@ -49,7 +49,7 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
             return None
             
         #TODO: denotebookify this, break out this use case, and add more of the other data products
-        @st.cache_data(ttl=ttl)
+        #@st.cache_data(ttl=ttl)
         def _query(query: str, **kwargs) -> pd.DataFrame:
 
             coords = zip_dict[query]
@@ -80,7 +80,10 @@ class AirnowConnection(ExperimentalBaseConnection[requests.session]):
                                     "AQI","Danger","Site Name",
                                     "drop1","drop2","drop3"]
                             ).drop(["drop1","drop2","drop3"],axis=1)
-                            
+
+            if len(df.index) == 0: #no stations within 20mi
+                return df 
+
             danger_conv = {
                 "-999":"",
                 "1":"",
