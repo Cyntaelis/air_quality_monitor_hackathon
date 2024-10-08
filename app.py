@@ -34,11 +34,12 @@ with st.form(key="my_form"):
     st.form_submit_button("Lookup")
 
 if st.session_state.zip_code != "":
-    results = conn.query(st.session_state.zip_code)
-    if results is None:
-        st.text("Error: invalid zip code or server issues")
-    else:
-        df = results
+    with st.spinner("Loading Data"):
+        results = conn.query(st.session_state.zip_code)
+        if results is None:
+            st.text("Error: invalid zip code or server issues")
+        else:
+            df = results
 
 st.dataframe(df, use_container_width=True, hide_index=True)
 
